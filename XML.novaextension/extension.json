@@ -1,0 +1,48 @@
+{
+  "identifier": "robb-j.XML",
+  "name": "XML",
+  "organization": "robb-j",
+  "description": "Adds XML linting and schema support to Nova",
+  "version": "0.0",
+  "categories": ["completions", "languages", "issues"],
+  "license": "MIT",
+  "repository": "https://github.com/robb-j/nova-xml",
+  "bugs": "https://github.com/robb-j/nova-xml/issues",
+
+  "main": "main.dist.js",
+
+  "activationEvents": ["onLanguage:xml"],
+
+  "entitlements": {
+    "process": true,
+    "filesystem": "readwrite"
+  },
+
+  "config": [
+    {
+      "title": "Format on Save",
+      "key": "robb-j.xml.formatOnSave",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+
+  "commands": {
+    "editor": [
+      {
+        "title": "Format",
+        "command": "robb-j.xml.format",
+        "filters": {
+          "syntaxes": ["xml"]
+        }
+      },
+      {
+        "title": "Rename",
+        "command": "robb-j.xml.rename",
+        "filters": {
+          "syntaxes": ["xml"]
+        }
+      }
+    ]
+  }
+}

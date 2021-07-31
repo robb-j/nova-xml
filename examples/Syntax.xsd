@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:nova:xml" xmlns="urn:nova:xml" elementFormDefault="qualified">
+
+	<!--
+    1. Attributes
+  -->
+
+	<!-- https://docs.nova.app/syntax-reference/scopes/#spell-checking -->
+	<xs:attribute name="spell-check" type="xs:boolean">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#spell-checking</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+
+	<!-- https://docs.nova.app/syntax-reference/scopes/#lookup -->
+	<xs:attribute name="lookup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#lookup</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="inherit" />
+				<xs:enumeration value="dictionary" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+
+	<!-- https://docs.nova.app/syntax-reference/scopes/#atomic-scopes -->
+	<xs:attribute name="atomic" type="xs:boolean">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#atomic-scopes</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+
+	<!-- 
+    1. Simple elements
+  -->
+
+	<!-- 
+    Common
+  -->
+	<!-- expression -->
+	<xs:element name="expression">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#match-scopes</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<!-- capture -->
+	<xs:element name="capture">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#match-scopes</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="number" type="xs:integer" />
+			<xs:attribute name="name" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- starts-with -->
+	<xs:element name="starts-with">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#start-end-scopes</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="expression" minOccurs="1" />
+				<xs:element ref="capture" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- ends-with -->
+	<xs:element name="ends-with">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#start-end-scopes</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="expression" minOccurs="1" />
+				<xs:element ref="capture" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- cut-off -->
+	<xs:element name="cut-off">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#cut-off-scopes</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="expression" minOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- include -->
+	<xs:element name="include">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#include-scopes</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="syntax" type="xs:string" />
+			<xs:attribute name="collection" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- 
+    META
+  -->
+
+	<!-- name  -->
+	<xs:element name="name" type="xs:string">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#user-readable-name</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<!-- type  -->
+	<xs:element name="type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#syntax-type</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="markup" />
+				<xs:enumeration value="stylesheet" />
+				<xs:enumeration value="script" />
+				<xs:enumeration value="compiled" />
+				<xs:enumeration value="structured" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<!-- preferred-file-extension -->
+	<xs:element name="preferred-file-extension" type="xs:string">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#preferred-file-extension</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<!-- parent -->
+	<xs:element name="parent" type="xs:string">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#parent</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<!-- scriptable -->
+	<xs:element name="scriptable">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#scriptable</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="scriptable" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- 
+    DETECTOR
+  -->
+
+	<!-- file-extension-detectors -->
+	<xs:element name="extension">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#file-extension-detectors</xs:documentation>
+		</xs:annotation>
+		<xs:complexType mixed="true">
+			<xs:attribute name="priority" type="xs:decimal" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- filename-detectors -->
+	<xs:element name="filename">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#filename-detectors</xs:documentation>
+		</xs:annotation>
+		<xs:complexType mixed="true">
+			<xs:attribute name="priority" type="xs:decimal" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- content-match-detectors -->
+	<xs:element name="match-content">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#content-match-detectors</xs:documentation>
+		</xs:annotation>
+		<xs:complexType mixed="true">
+			<xs:attribute name="priority" type="xs:decimal" />
+			<xs:attribute name="lines" type="xs:integer" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- compound-detectors -->
+	<xs:element name="combo">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#compound-detectors</xs:documentation>
+		</xs:annotation>
+		<xs:complexType mixed="true">
+			<xs:all>
+				<xs:element ref="extension" minOccurs="0" />
+				<xs:element ref="filename" minOccurs="0" />
+				<xs:element ref="match-content" minOccurs="0" />
+				<xs:element ref="syntax" minOccurs="0" />
+			</xs:all>
+			<xs:attribute name="priority" type="xs:decimal" />
+			<xs:attribute name="lines" type="xs:integer" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- 
+    Indentation
+  -->
+
+	<!-- increase -->
+	<xs:element name="increase">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#indentation-rules</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="expression" />
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- decrease -->
+	<xs:element name="decrease">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#indentation-rules</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="expression" />
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- 
+    Comments
+  -->
+	<!-- single -->
+	<xs:element name="single">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#comment-rules</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="expression" />
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- multiline -->
+	<xs:element name="multiline">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#comment-rules</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="starts-with" />
+				<xs:element ref="ends-with" />
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<!--
+    Brackets
+  -->
+
+	<!-- pair -->
+	<xs:element name="pair">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#brackets</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="open" use="required" type="xs:string" />
+			<xs:attribute name="close" use="required" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+
+	<!--
+    Symbols
+  -->
+	<xs:element name="symbols">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/symbols/#grammar-symbolication-options</xs:documentation>
+		</xs:annotation>
+		<!--
+      TODO
+    -->
+	</xs:element>
+
+	<!--
+    Symbol
+  -->
+	<!-- auto-close -->
+	<xs:element name="auto-close">
+		<xs:complexType>
+			<xs:attribute name="string" />
+			<xs:attribute name="completion" />
+			<xs:attribute name="indentation">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="auto" />
+						<xs:enumeration value="none" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- context -->
+	<xs:element name="context">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/symbols/#symbolic-contexts</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="auto-close" minOccurs="0" />
+			</xs:all>
+			<xs:attribute name="behavior">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="subtree" />
+						<xs:enumeration value="whitespace" />
+						<xs:enumeration value="start" />
+						<xs:enumeration value="end" />
+						<xs:enumeration value="next" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="group" />
+			<xs:attribute name="group-by-name" />
+			<xs:attribute name="priority" />
+			<xs:attribute name="export-local" />
+			<xs:attribute name="unclosed" />
+			<xs:attribute name="foldable" />
+			<xs:attribute name="fold-type" />
+			<xs:attribute name="arguments" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- filter -->
+	<xs:element name="filter">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/symbols/#filtering-symbols</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="match-start" type="xs:string" />
+			<xs:attribute name="match-end" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- component -->
+	<xs:element name="component">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/symbols/#computing-a-symbols-display-name</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="variable" type="xs:string" />
+			<xs:attribute name="selector" type="xs:string" />
+			<xs:attribute name="prepend" type="xs:string" />
+			<xs:attribute name="append" type="xs:string" />
+			<xs:attribute name="replace" type="xs:string" />
+			<xs:attribute name="replace-with" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- display-name -->
+	<xs:element name="display-name">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/symbols/#computing-a-symbols-display-name</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="component" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- symbol -->
+	<xs:element name="symbol">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/symbols/#basic-symbols</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="display-name" minOccurs="0" />
+				<xs:element ref="filter" minOccurs="0" />
+				<xs:element ref="context" minOccurs="0" />
+			</xs:all>
+			<xs:attribute name="type">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">https://docs.nova.app/api-reference/symbol/</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="scope">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/symbols/#defining-a-symbols-scope</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="global" />
+						<xs:enumeration value="private" />
+						<xs:enumeration value="local" />
+						<xs:enumeration value="external" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="anonymous" type="xs:boolean" />
+		</xs:complexType>
+	</xs:element>
+
+	<!--
+    Collection
+  -->
+
+	<!-- scope -->
+	<xs:element name="scope">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#types-of-scopes</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="symbol" minOccurs="0" />
+				<xs:element ref="expression" minOccurs="0" />
+				<xs:element ref="capture" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element ref="starts-with" minOccurs="0" />
+				<xs:element ref="ends-with" minOccurs="0" />
+				<xs:element name="subscopes" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="cut-off" minOccurs="0" maxOccurs="unbounded" />
+							<xs:element ref="scope" minOccurs="0" maxOccurs="unbounded" />
+							<xs:element ref="include" minOccurs="0" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+
+			<xs:attribute name="name" type="xs:string" />
+			<xs:attribute ref="spell-check" />
+			<xs:attribute ref="lookup" />
+			<xs:attribute ref="atomic" />
+			<xs:attribute name="anchored" type="xs:boolean" />
+			<xs:attribute name="optional" type="xs:boolean" />
+			<xs:attribute name="repeat" type="xs:boolean" />
+		</xs:complexType>
+
+
+	</xs:element>
+
+	<!-- https://docs.nova.app/syntax-reference/syntaxes/#collections -->
+	<xs:element name='collection'>
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				<!-- ... -->
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="scope" maxOccurs="unbounded" />
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" />
+		</xs:complexType>
+
+	</xs:element>
+
+
+	<!-- 
+    2. Entry point
+  -->
+	<xs:element name="syntax">
+		<xs:complexType>
+			<xs:all>
+				<!-- meta -->
+				<xs:element name="meta" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							https://docs.nova.app/syntax-reference/syntaxes/#meta-properties
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:all>
+							<xs:element ref="name" minOccurs="0" />
+							<xs:element ref="type" minOccurs="0" />
+							<xs:element ref="preferred-file-extension" minOccurs="0" />
+							<xs:element ref="parent" minOccurs="0" />
+							<xs:element ref="scriptable" minOccurs="0" />
+						</xs:all>
+					</xs:complexType>
+				</xs:element>
+
+				<!-- detectors -->
+				<xs:element name="detectors" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							https://docs.nova.app/syntax-reference/syntaxes/#detectors
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="extension" minOccurs="0" />
+							<xs:element ref="filename" minOccurs="0" />
+							<xs:element ref="match-content" minOccurs="0" />
+							<xs:element ref="syntax" minOccurs="0" />
+							<xs:element ref="combo" minOccurs="0" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<!-- indentation -->
+				<xs:element name="indentation" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							https://docs.nova.app/syntax-reference/syntaxes/#indentation-rules
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="increase" minOccurs="0" />
+							<xs:element ref="decrease" minOccurs="0" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<!-- comments -->
+				<xs:element name="comments" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							https://docs.nova.app/syntax-reference/syntaxes/#comment-rules
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="single" minOccurs="0" />
+							<xs:element ref="multiline" minOccurs="0" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<!-- brackets -->
+				<xs:element name="brackets" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							https://docs.nova.app/syntax-reference/syntaxes/#brackets
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="pair" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<!-- surrounding-pairs -->
+				<xs:element name="surrounding-pairs" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							https://docs.nova.app/syntax-reference/syntaxes/#surrounding-pairs
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="pair" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<!--  scopes -->
+				<xs:element name="scopes" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							https://docs.nova.app/syntax-reference/syntaxes/#scopes
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="include" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<!-- template-scopes -->
+				<xs:element name="template-scopes" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							https://docs.nova.app/syntax-reference/syntaxes/#template-scopes
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="include" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<!-- collection -->
+				<xs:element name="collections" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#collections
+            </xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="collection" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:all>
+
+
+			<!--
+        syntax#name
+      -->
+			<xs:attribute name="name" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

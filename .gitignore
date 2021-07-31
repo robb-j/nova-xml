@@ -1,0 +1,12 @@
+#
+# Files to ignore from git source control
+#
+
+node_modules
+*.env
+.DS_Store
+
+stdin.log
+stdout.log
+debug.log
+.vscode

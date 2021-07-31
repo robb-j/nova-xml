@@ -1,0 +1,6 @@
+#
+# Files to ignore from prettier
+#
+
+XML.novaextension/Scripts
+coverage
