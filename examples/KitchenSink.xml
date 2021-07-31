@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<syntax name="prisma" xmlns="https://www.nova.app/syntax">
+	<meta>
+		<name>Kitchen Sink</name>
+		<type>script</type>
+		<preferred-file-extension>sink</preferred-file-extension>
+		<parent>markdown</parent>
+		<scriptable shebang="#!/usr/bin/env sink" />
+	</meta>
+
+	<detectors>
+		<extension priority="1.0">sink,md.sink</extension>
+		<filename priority="0.9">KitchenSink</filename>
+		<match-content lines="1" priority="0.8">^#!\/.+(sink)$</match-content>
+
+		<combo priority="0.7">
+			<extension>sink</extension>
+			<filename>kitchen</filename>
+			<match-content>everything-in-the-sink</match-content>
+		</combo>
+	</detectors>
+
+	<indentation>
+		<increase>
+			<expression>(\{[^}\"']*$)|(\[[^\]\"']*$)|(\([^)\"']*$)</expression>
+		</increase>
+		<decrease>
+			<expression>^\s*(\s*/\*.*\*/\s*)*[\}\]\)\\]</expression>
+		</decrease>
+	</indentation>
+
+	<comments>
+		<single>
+			<expression>//</expression>
+		</single>
+		<multiline>
+			<starts-with>
+				<expression>/*</expression>
+			</starts-with>
+			<ends-with>
+				<expression>*/</expression>
+			</ends-with>
+		</multiline>
+	</comments>
+
+	<brackets>
+		<pair open="{" close="}" />
+		<pair open="[" close="]" />
+		<pair open="(" close=")" />
+	</brackets>
+
+	<surrounding-pairs>
+		<pair open="{" close="}" />
+		<pair open="[" close="]" />
+		<pair open="(" close=")" />
+		<pair open="'" close="'" />
+		<pair open="\" close="\" />
+		<pair open="`" close="`" />
+	</surrounding-pairs>
+
+	<collections>
+		<collection name="comments">
+			<scope name="comment.single" spell-check="true">
+				<expression>\/\/\s*(\w)</expression>
+			</scope>
+
+			<scope name="comment.multi-line" spell-check="true">
+				<starts-with>
+					<expression>\/*</expression>
+				</starts-with>
+				<ends-with>
+					<expression>*\\</expression>
+				</ends-with>
+			</scope>
+
+			<scope name="sink.identifier.variable">
+				<expression>\b(let)\s+([a-zA-ZÀ-ÖØ-öø-ÿ_][A-Za-zÀ-ÖØ-öø-ÿ0-9_]*)</expression>
+				<capture number="1" name="sink.keyword.let" />
+				<capture number="2" name="sink.identifier.variable.name" />
+			</scope>
+
+			<scope name="sink.function">
+				<starts-with>
+					<expression>(\[)</expression>
+					<capture number="1" name="sink.bracket" />
+				</starts-with>
+				<ends-with>
+					<expression>(\])</expression>
+					<capture number="1" name="sink.bracket" />
+				</ends-with>
+				<subscopes>
+					<scope name="sink.number">
+						<expression>\d+</expression>
+					</scope>
+					<scope name="sink.boolean">
+						<expression>true|false</expression>
+					</scope>
+					<scope name="sink.string">
+						<expression>&quot;[^&quot;]*&quot;</expression>
+					</scope>
+				</subscopes>
+			</scope>
+		</collection>
+	</collections>
+
+	<scopes>
+		<include syntax="self" collection="comments" />
+		<scope name="sink.keyword">
+			<strings>
+				<string>kitchen</string>
+				<string>sink</string>
+			</strings>
+		</scope>
+	</scopes>
+</syntax>

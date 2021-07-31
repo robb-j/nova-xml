@@ -34,12 +34,21 @@ export class XmlLanguageServer {
         ? nova.extension.path
         : nova.extension.globalStoragePath
 
+      const catalogPath = nova.path.join(packageDir, 'Schemas/catalog.xml')
+
       const serverOptions = await this.getServerOptions(
         packageDir,
         DEBUG_LOGS ? nova.workspace.path : null
       )
       const clientOptions: ClientOptions = {
         syntaxes: ['xml'],
+        initializationOptions: {
+          settings: {
+            xml: {
+              catalogs: [catalogPath],
+            },
+          },
+        },
       }
 
       debug('serverOptions', serverOptions)
@@ -77,16 +86,7 @@ export class XmlLanguageServer {
 
   //
 
-  setupLanguageServer(client: LanguageClient) {
-    // const params: lsp.DidChangeConfigurationParams = {
-    //   settings: {
-    //     xml: {
-    //       catalogs: ['examples/catalog.xml'],
-    //     },
-    //   },
-    // }
-    // client.sendNotification('workspace/didChangeConfiguration', params)
-  }
+  setupLanguageServer(client: LanguageClient) {}
 
   async getServerOptions(packageDir: string, debugPath: string | null) {
     const serverPath = nova.path.join(packageDir, 'bin/lemminx-osx-x86_64')

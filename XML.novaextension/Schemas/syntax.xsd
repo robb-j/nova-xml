@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:nova:xml" xmlns="urn:nova:xml" elementFormDefault="qualified">
+<?xml version="1.1" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.1" targetNamespace="https://www.nova.app/syntax" xmlns="https://www.nova.app/syntax" elementFormDefault="qualified">
 
 	<!--
     1. Attributes
@@ -11,6 +11,7 @@
 			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#spell-checking</xs:documentation>
 		</xs:annotation>
 	</xs:attribute>
+
 
 	<!-- https://docs.nova.app/syntax-reference/scopes/#lookup -->
 	<xs:attribute name="lookup">
@@ -57,30 +58,45 @@
 		</xs:complexType>
 	</xs:element>
 
-	<!-- starts-with -->
-	<xs:element name="starts-with">
-		<xs:annotation>
-			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#start-end-scopes</xs:documentation>
-		</xs:annotation>
+	<!-- strings -->
+	<xs:element name="strings">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="expression" minOccurs="1" />
-				<xs:element ref="capture" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element name="string" maxOccurs="unbounded" />
 			</xs:sequence>
+			<xs:attribute name="prefix" />
+			<xs:attribute name="suffix" />
+			<xs:attribute name="word-boundary" />
+			<xs:attribute name="case-insensitive" />
 		</xs:complexType>
 	</xs:element>
 
-	<!-- ends-with -->
-	<xs:element name="ends-with">
+	<!-- complex expr -->
+	<xs:complexType name="complex-expr">
+		<xs:choice>
+			<xs:sequence>
+				<xs:element ref="expression" />
+				<xs:element ref="capture" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+			<xs:sequence>
+				<xs:element ref="strings" />
+				<xs:element ref="capture" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:choice>
+	</xs:complexType>
+
+	<!-- starts-with -->
+	<xs:element name="starts-with" type="complex-expr">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#start-end-scopes</xs:documentation>
 		</xs:annotation>
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="expression" minOccurs="1" />
-				<xs:element ref="capture" minOccurs="0" maxOccurs="unbounded" />
-			</xs:sequence>
-		</xs:complexType>
+	</xs:element>
+
+	<!-- ends-with -->
+	<xs:element name="ends-with" type="complex-expr">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#start-end-scopes</xs:documentation>
+		</xs:annotation>
 	</xs:element>
 
 	<!-- cut-off -->
@@ -90,7 +106,7 @@
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="expression" minOccurs="1" />
+				<xs:element ref="expression" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -101,8 +117,8 @@
 			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#include-scopes</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
-			<xs:attribute name="syntax" type="xs:string" />
-			<xs:attribute name="collection" type="xs:string" />
+			<xs:attribute name="syntax" type="xs:string" use="required" />
+			<xs:attribute name="collection" type="xs:string" use="required" />
 		</xs:complexType>
 	</xs:element>
 
@@ -153,7 +169,7 @@
 			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#scriptable</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
-			<xs:attribute name="scriptable" type="xs:string" />
+			<xs:attribute name="shebang" type="xs:string" />
 		</xs:complexType>
 	</xs:element>
 
@@ -198,12 +214,12 @@
 			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#compound-detectors</xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:all>
-				<xs:element ref="extension" minOccurs="0" />
-				<xs:element ref="filename" minOccurs="0" />
-				<xs:element ref="match-content" minOccurs="0" />
-				<xs:element ref="syntax" minOccurs="0" />
-			</xs:all>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="extension" />
+				<xs:element ref="filename" />
+				<xs:element ref="match-content" />
+				<xs:element ref="syntax" />
+			</xs:choice>
 			<xs:attribute name="priority" type="xs:decimal" />
 			<xs:attribute name="lines" type="xs:integer" />
 		</xs:complexType>
@@ -295,6 +311,7 @@
 	<!--
     Symbol
   -->
+
 	<!-- auto-close -->
 	<xs:element name="auto-close">
 		<xs:complexType>
@@ -423,24 +440,25 @@
 			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#types-of-scopes</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="symbol" minOccurs="0" />
-				<xs:element ref="expression" minOccurs="0" />
-				<xs:element ref="capture" minOccurs="0" maxOccurs="unbounded" />
-				<xs:element ref="starts-with" minOccurs="0" />
-				<xs:element ref="ends-with" minOccurs="0" />
-				<xs:element name="subscopes" minOccurs="0">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="symbol" />
+				<xs:element ref="expression" />
+				<xs:element ref="capture" />
+				<xs:element ref="starts-with" />
+				<xs:element ref="ends-with" />
+				<xs:element ref="strings" />
+				<xs:element name="subscopes">
 					<xs:complexType>
-						<xs:sequence>
-							<xs:element ref="cut-off" minOccurs="0" maxOccurs="unbounded" />
-							<xs:element ref="scope" minOccurs="0" maxOccurs="unbounded" />
-							<xs:element ref="include" minOccurs="0" maxOccurs="unbounded" />
-						</xs:sequence>
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:element ref="cut-off" />
+							<xs:element ref="include" />
+							<xs:element ref="scope" />
+						</xs:choice>
 					</xs:complexType>
 				</xs:element>
-			</xs:sequence>
+			</xs:choice>
 
-			<xs:attribute name="name" type="xs:string" />
+			<xs:attribute name="name" type="xs:string" use="required" />
 			<xs:attribute ref="spell-check" />
 			<xs:attribute ref="lookup" />
 			<xs:attribute ref="atomic" />
@@ -452,18 +470,17 @@
 
 	</xs:element>
 
-	<!-- https://docs.nova.app/syntax-reference/syntaxes/#collections -->
+	<!-- collection -->
 	<xs:element name='collection'>
 		<xs:annotation>
-			<xs:documentation xml:lang="en">
-				<!-- ... -->
-			</xs:documentation>
+			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#collections</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="scope" maxOccurs="unbounded" />
-			</xs:sequence>
-			<xs:attribute name="name" type="xs:string" />
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="include" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element ref="scope" minOccurs="0" maxOccurs="unbounded" />
+			</xs:choice>
+			<xs:attribute name="name" type="xs:string" use="required" />
 		</xs:complexType>
 
 	</xs:element>
@@ -474,7 +491,7 @@
   -->
 	<xs:element name="syntax">
 		<xs:complexType>
-			<xs:all>
+			<xs:choice maxOccurs="unbounded">
 				<!-- meta -->
 				<xs:element name="meta" minOccurs="0">
 					<xs:annotation>
@@ -520,8 +537,8 @@
 					</xs:annotation>
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element ref="increase" minOccurs="0" />
-							<xs:element ref="decrease" minOccurs="0" />
+							<xs:element ref="increase" />
+							<xs:element ref="decrease" />
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
@@ -577,9 +594,10 @@
 						</xs:documentation>
 					</xs:annotation>
 					<xs:complexType>
-						<xs:sequence>
-							<xs:element ref="include" maxOccurs="unbounded" />
-						</xs:sequence>
+						<xs:choice maxOccurs="unbounded">
+							<xs:element ref="include" />
+							<xs:element ref="scope" />
+						</xs:choice>
 					</xs:complexType>
 				</xs:element>
 
@@ -591,13 +609,14 @@
 						</xs:documentation>
 					</xs:annotation>
 					<xs:complexType>
-						<xs:sequence>
-							<xs:element ref="include" maxOccurs="unbounded" />
-						</xs:sequence>
+						<xs:choice maxOccurs="unbounded">
+							<xs:element ref="include" />
+							<xs:element ref="scope" />
+						</xs:choice>
 					</xs:complexType>
 				</xs:element>
 
-				<!-- collection -->
+				<!-- collections -->
 				<xs:element name="collections" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/syntaxes/#collections
@@ -609,7 +628,7 @@
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
-			</xs:all>
+			</xs:choice>
 
 
 			<!--
