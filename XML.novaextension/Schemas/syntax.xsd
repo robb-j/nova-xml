@@ -5,33 +5,7 @@
     1. Attributes
   -->
 
-	<!-- https://docs.nova.app/syntax-reference/scopes/#spell-checking -->
-	<xs:attribute name="spell-check" type="xs:boolean">
-		<xs:annotation>
-			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#spell-checking</xs:documentation>
-		</xs:annotation>
-	</xs:attribute>
-
-
-	<!-- https://docs.nova.app/syntax-reference/scopes/#lookup -->
-	<xs:attribute name="lookup">
-		<xs:annotation>
-			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#lookup</xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-				<xs:enumeration value="inherit" />
-				<xs:enumeration value="dictionary" />
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:attribute>
-
-	<!-- https://docs.nova.app/syntax-reference/scopes/#atomic-scopes -->
-	<xs:attribute name="atomic" type="xs:boolean">
-		<xs:annotation>
-			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#atomic-scopes</xs:documentation>
-		</xs:annotation>
-	</xs:attribute>
+	<!-- ... -->
 
 	<!-- 
     1. Simple elements
@@ -71,17 +45,20 @@
 		</xs:complexType>
 	</xs:element>
 
+	<xs:element name="template" type="xs:string" />
+
 	<!-- complex expr -->
 	<xs:complexType name="complex-expr">
 		<xs:choice>
 			<xs:sequence>
-				<xs:element ref="expression" />
+				<xs:choice>
+					<xs:element ref="expression" />
+					<xs:element ref="strings" />
+					<xs:element ref="template" />
+				</xs:choice>
 				<xs:element ref="capture" minOccurs="0" maxOccurs="unbounded" />
 			</xs:sequence>
-			<xs:sequence>
-				<xs:element ref="strings" />
-				<xs:element ref="capture" minOccurs="0" maxOccurs="unbounded" />
-			</xs:sequence>
+			<xs:sequence />
 		</xs:choice>
 	</xs:complexType>
 
@@ -100,15 +77,10 @@
 	</xs:element>
 
 	<!-- cut-off -->
-	<xs:element name="cut-off">
+	<xs:element name="cut-off" type="complex-expr">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">https://docs.nova.app/syntax-reference/scopes/#cut-off-scopes</xs:documentation>
 		</xs:annotation>
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="expression" />
-			</xs:sequence>
-		</xs:complexType>
 	</xs:element>
 
 	<!-- include -->
@@ -119,6 +91,8 @@
 		<xs:complexType>
 			<xs:attribute name="syntax" type="xs:string" use="required" />
 			<xs:attribute name="collection" type="xs:string" use="required" />
+			<xs:attribute name="optional" type="xs:boolean" />
+			<xs:attribute name="repeat" type="xs:boolean" />
 		</xs:complexType>
 	</xs:element>
 
@@ -427,6 +401,7 @@
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="anonymous" type="xs:boolean" />
+			<xs:attribute name="name-selector" type="xs:string" />
 		</xs:complexType>
 	</xs:element>
 
@@ -441,6 +416,7 @@
 		</xs:annotation>
 		<xs:complexType>
 			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="include" />
 				<xs:element ref="symbol" />
 				<xs:element ref="expression" />
 				<xs:element ref="capture" />
@@ -454,14 +430,24 @@
 							<xs:element ref="include" />
 							<xs:element ref="scope" />
 						</xs:choice>
+						<xs:attribute name="anchored" type="xs:boolean" />
+						<xs:attribute name="skip-whitespace" type="xs:boolean" />
 					</xs:complexType>
 				</xs:element>
 			</xs:choice>
 
 			<xs:attribute name="name" type="xs:string" use="required" />
-			<xs:attribute ref="spell-check" />
-			<xs:attribute ref="lookup" />
-			<xs:attribute ref="atomic" />
+			<xs:attribute name="spell-check" type="xs:boolean" />
+			<xs:attribute name="lookup">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="inherit" />
+						<xs:enumeration value="dictionary" />
+						<xs:enumeration value="documentation" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="atomic" type="xs:boolean" />
 			<xs:attribute name="anchored" type="xs:boolean" />
 			<xs:attribute name="optional" type="xs:boolean" />
 			<xs:attribute name="repeat" type="xs:boolean" />
@@ -481,6 +467,9 @@
 				<xs:element ref="scope" minOccurs="0" maxOccurs="unbounded" />
 			</xs:choice>
 			<xs:attribute name="name" type="xs:string" use="required" />
+
+			<!-- This isn't documented but shows up in official syntaxes -->
+			<xs:attribute name="override" type="xs:boolean" />
 		</xs:complexType>
 
 	</xs:element>
@@ -536,10 +525,10 @@
 						</xs:documentation>
 					</xs:annotation>
 					<xs:complexType>
-						<xs:sequence>
+						<xs:choice maxOccurs="unbounded">
 							<xs:element ref="increase" />
 							<xs:element ref="decrease" />
-						</xs:sequence>
+						</xs:choice>
 					</xs:complexType>
 				</xs:element>
 
@@ -551,10 +540,10 @@
 						</xs:documentation>
 					</xs:annotation>
 					<xs:complexType>
-						<xs:sequence>
+						<xs:choice maxOccurs="unbounded">
 							<xs:element ref="single" minOccurs="0" />
 							<xs:element ref="multiline" minOccurs="0" />
-						</xs:sequence>
+						</xs:choice>
 					</xs:complexType>
 				</xs:element>
 

@@ -72,7 +72,9 @@
 					<expression>*\\</expression>
 				</ends-with>
 			</scope>
+		</collection>
 
+		<collection name="misc">
 			<scope name="sink.identifier.variable">
 				<expression>\b(let)\s+([a-zA-ZÀ-ÖØ-öø-ÿ_][A-Za-zÀ-ÖØ-öø-ÿ0-9_]*)</expression>
 				<capture number="1" name="sink.keyword.let" />
@@ -99,6 +101,29 @@
 						<expression>&quot;[^&quot;]*&quot;</expression>
 					</scope>
 				</subscopes>
+			</scope>
+		</collection>
+
+		<collection name="more-misc">
+			<scope name="html.tag.open.paired" spell-check="false" lookup="documentation">
+				<symbol type="tag-heading">
+					<display-name>
+						<component variable="name" />
+						<component selector="tag.attribute.value.id" prepend="#" />
+						<component selector="tag.attribute.value.class" prepend="." replace="\s+" replace-with="." />
+					</display-name>
+					<context behavior="start" group-by-name="true" unclosed="parent">
+						<auto-close string="&lt;/" completion="${name}&gt;" />
+					</context>
+				</symbol>
+				<starts-with>
+					<strings prefix="&lt;" suffix="\b" word-boundary="false" case-insensitive="true">
+						<string>h1</string>
+						<string>h2</string>
+						<string>h3</string>
+					</strings>
+					<capture number="1" name="html.tag.name" />
+				</starts-with>
 			</scope>
 		</collection>
 	</collections>
