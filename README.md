@@ -2,6 +2,6 @@
 
 Please see:
 
-- [Extension README.md →](/Prisma.novaextension/README.md)
+- [Extension README.md →](/XML.novaextension/README.md)
 - [Extension CHANGELOG.md →](/XML.novaextension/CHANGELOG.md)
 - [DEVELOPMENT.md →](/DEVELOPMENT.md)
