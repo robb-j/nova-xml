@@ -20,6 +20,7 @@
 		</combo>
 	</detectors>
 
+
 	<indentation>
 		<increase>
 			<expression>(\{[^}\"']*$)|(\[[^\]\"']*$)|(\([^)\"']*$)</expression>
@@ -28,6 +29,10 @@
 			<expression>^\s*(\s*/\*.*\*/\s*)*[\}\]\)\\]</expression>
 		</decrease>
 	</indentation>
+
+	<symbols redefinition="within-construct">
+		<local scope="within-construct" />
+	</symbols>
 
 	<comments>
 		<single>
