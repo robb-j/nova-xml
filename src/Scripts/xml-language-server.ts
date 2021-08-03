@@ -1,5 +1,3 @@
-import type * as lsp from 'vscode-languageserver-protocol'
-
 import { console, createDebug } from './utils'
 
 type ServerOptions = ConstructorParameters<typeof LanguageClient>[2]
@@ -7,7 +5,7 @@ type ClientOptions = ConstructorParameters<typeof LanguageClient>[3]
 
 const debug = createDebug('xml-language-server')
 
-const DEBUG_LOGS = true
+const DEBUG_LOGS = false
 
 export class XmlLanguageServer {
   languageClient: LanguageClient | null = null

@@ -18,6 +18,7 @@ Files are cached at `~/.lemminx`
 - Check the core language definitions are still valid
 - Generate new screenshots if needed
 - Ensure the `CHANGELOG.md` is up to date
+- Ensure `DEBUG_LOGS` is turned off
 - Run the build
 - Bump the version in `extension.json`
 - Commit as `X.Y.Z`
