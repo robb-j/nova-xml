@@ -469,6 +469,7 @@
 				<xs:element ref="starts-with" />
 				<xs:element ref="ends-with" />
 				<xs:element ref="strings" />
+				<xs:element ref="subscopes" />
 			</xs:choice>
 
 			<xs:attribute name="name" type="xs:string" use="required" />

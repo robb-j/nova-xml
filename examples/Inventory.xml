@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inventory>
+	<garage>
+		<car name="Bugatti Veyron" wheels="4" />
+		<bicycle name="Gordon" needs-maintenance="true" />
+		<motorbike name="Felicia" />
+	</garage>
+</inventory>
