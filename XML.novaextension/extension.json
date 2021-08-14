@@ -2,7 +2,7 @@
   "identifier": "robb-j.XML",
   "name": "XML",
   "organization": "robb-j",
-  "description": "Adds XML linting and schema support to Nova",
+  "description": "Adds XML linting, schema support and formatting to Nova",
   "version": "0.1",
   "categories": ["completions", "languages", "issues"],
   "license": "MIT",
