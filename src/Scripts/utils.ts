@@ -47,14 +47,6 @@ export function getEditor<T>(block: (editor: TextEditor) => T) {
  * Shamelessly stolen from
  * https://github.com/apexskier/nova-typescript/blob/2d4c1d8e61ca4afba6ee9ad1977a765e8cd0f037/src/lspNovaConversions.ts#L29
  */
-// export interface LspRange {
-//   start: { line: number; character: number }
-//   end: { line: number; character: number }
-// }
-// export interface LspEdit {
-//   range: LspRange
-//   newText: string
-// }
 export function getEditorRange(document: TextDocument, range: LspRange): Range {
   const fullContents = document.getTextInRange(new Range(0, document.length))
   let rangeStart = 0
