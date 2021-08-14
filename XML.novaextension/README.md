@@ -35,6 +35,11 @@ XML Extension displays relevant documentation when you hover over symbols:
 
 <img src="https://raw.githubusercontent.com/robb-j/nova-xml/main/XML.novaextension/Images/extension/hovers.png" width="800" alt="Get tooltips when writting XML files">
 
+**Commands**
+
+- **Format** will format the current XML document.
+- **Rename** will rename the tag you have selected.
+
 ### Configuration
 
 To configure global preferences, open **Extensions → Extension Library...** then select XML's **Preferences** tab.
@@ -64,3 +69,9 @@ You can opt into it like this:
 
 W3 Schools has good tutorials for creating both [DTD](https://www.w3schools.com/xml/xml_dtd_intro.asp)
 and [XSD](https://www.w3schools.com/xml/schema_intro.asp) schemas.
+
+For an example, check out
+[Inventory.xml](https://github.com/robb-j/nova-xml/blob/main/examples/Inventory.xml)
+and [Intentory.xsd](https://github.com/robb-j/nova-xml/blob/main/examples/Inventory.xsd)
+in the example repo.
+It shows how to structure a schema and associate it relatively.
