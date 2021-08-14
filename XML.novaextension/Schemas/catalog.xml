@@ -1,7 +1,4 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-
-  <uri
-      name="https://www.nova.app/syntax"
-      uri="./syntax.xsd" />
-
+  <uri name="https://www.nova.app/syntax" uri="./syntax.xsd" />
+  <uri name="https://www.nova.app/completions" uri="./completions.xsd" />
 </catalog>

@@ -1,0 +1,20 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.1" targetNamespace="https://www.nova.app/completions" xmlns="https://www.nova.app/completions" elementFormDefault="qualified">
+
+  <!--
+    Entry point
+  -->
+  <xs:element name="completions">
+    <!-- TODO -->
+  </xs:element>
+
+  <!--
+    Providers
+  -->
+  <xs:element name="provider">
+    <xs:complexType>
+      <!-- TODO -->
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>
