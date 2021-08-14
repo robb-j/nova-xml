@@ -49,6 +49,8 @@ export class XmlLanguageServer {
         },
       }
 
+      await this.prepareBinary(serverOptions.path)
+
       debug('serverOptions', serverOptions)
       debug('clientOptions', clientOptions)
 
@@ -66,7 +68,7 @@ export class XmlLanguageServer {
 
       this.setupLanguageServer(client)
     } catch (error) {
-      console.log(error)
+      console.log(error.message)
       console.log(error.stack)
     }
   }
@@ -82,7 +84,17 @@ export class XmlLanguageServer {
     }
   }
 
-  //
+  // Make sure the LSP server binary is executable
+  prepareBinary(path: string) {
+    // Ensure the binary has execute permissions
+    return new Promise<void>((resolve, reject) => {
+      const process = new Process('/usr/bin/env', {
+        args: ['chmod', 'u+x', path],
+      })
+      process.onDidExit((status) => (status === 0 ? resolve() : reject()))
+      process.start()
+    })
+  }
 
   setupLanguageServer(client: LanguageClient) {}
 
