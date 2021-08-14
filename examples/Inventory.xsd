@@ -1,0 +1,58 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.1" targetNamespace="https://example.com/inventory" xmlns="https://example.com/inventory" elementFormDefault="qualified">
+
+  <!--
+    Entry point
+  -->
+  <xs:element name="inventory">
+    <!-- Add an on-hover annotation for this element -->
+    <xs:annotation>
+      <xs:documentation>
+        An inventory of things that a person might own
+      </xs:documentation>
+    </xs:annotation>
+
+    <!-- Define the type of the element, in this case only a "garage" child is allowed -->
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="garage"></xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Define a garage element, referenced from "inventory" -->
+  <xs:element name="garage">
+    <!-- Add an on-hover annotation for this element -->
+    <xs:annotation>
+      <xs:documentation>
+        A collection of vehicles that a person owns
+      </xs:documentation>
+    </xs:annotation>
+
+    <!-- Define that any amount of "car", "bicycle" or "motorbike" elements are allowed as children -->
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element ref="car"></xs:element>
+        <xs:element name="bicycle"></xs:element>
+        <xs:element name="motorbike"></xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Define a car element -->
+  <xs:element name="car">
+    <!-- Add an on-hover annotation for this element -->
+    <xs:annotation>
+      <xs:documentation>
+        A motorcar, you know, with wheels
+      </xs:documentation>
+    </xs:annotation>
+
+    <!-- Define the allowed attributes of a "car" -->
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:string" use="required" />
+      <xs:attribute name="wheels" type="xs:integer" />
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>
