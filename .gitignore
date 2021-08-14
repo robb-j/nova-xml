@@ -10,3 +10,6 @@ stdin.log
 stdout.log
 debug.log
 .vscode
+
+examples/syntaxes
+examples/completions
