@@ -11,17 +11,17 @@ export async function formatCommand(
   editor: TextEditor,
   client: LanguageClient
 ) {
-  debug('format', editor.document.uri)
-
   const params: DocumentFormattingParams = {
     textDocument: {
       uri: editor.document.uri,
     },
     options: {
       tabSize: editor.tabLength,
-      insertSpaces: editor.softTabs,
+      insertSpaces: Boolean(editor.softTabs),
     },
   }
+
+  debug('format', params)
 
   const result = (await client.sendRequest(
     'textDocument/formatting',
