@@ -89,3 +89,18 @@ export function getLspRange(
   }
   return null
 }
+
+/**
+ * Output put a potentially unknown error
+ */
+export function logError(message: string, error: unknown) {
+  console.error(message)
+
+  if (error instanceof Error) {
+    console.error(error.message)
+    console.error(error.stack)
+  } else {
+    console.error('An non-error was thrown')
+    console.error(error)
+  }
+}

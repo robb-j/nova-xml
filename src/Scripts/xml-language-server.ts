@@ -1,11 +1,11 @@
-import { console, createDebug } from './utils'
+import { createDebug, logError } from './utils'
 
 type ServerOptions = ConstructorParameters<typeof LanguageClient>[2]
 type ClientOptions = ConstructorParameters<typeof LanguageClient>[3]
 
 const debug = createDebug('xml-language-server')
 
-const DEBUG_LOGS = false
+const DEBUG_LOGS = nova.inDevMode() && false
 
 export class XmlLanguageServer {
   languageClient: LanguageClient | null = null
@@ -26,6 +26,8 @@ export class XmlLanguageServer {
     this.stop()
 
     try {
+      this.stop()
+
       debug('#start')
 
       const packageDir = nova.inDevMode()
@@ -56,7 +58,7 @@ export class XmlLanguageServer {
 
       const client = new LanguageClient(
         'robb-j.xml',
-        nova.extension.name,
+        'XML LanguageClient',
         serverOptions,
         clientOptions
       )
@@ -68,8 +70,7 @@ export class XmlLanguageServer {
 
       this.setupLanguageServer(client)
     } catch (error) {
-      console.log(error.message)
-      console.log(error.stack)
+      logError('LanguageServer Failed', error)
     }
   }
 
@@ -96,7 +97,11 @@ export class XmlLanguageServer {
     })
   }
 
-  setupLanguageServer(client: LanguageClient) {}
+  setupLanguageServer(client: LanguageClient) {
+    client.onDidStop((err) => {
+      debug('Language Server Stopped', err?.message)
+    })
+  }
 
   async getServerOptions(packageDir: string, debugPath: string | null) {
     const serverPath = nova.path.join(packageDir, 'bin/lemminx-osx-x86_64')

@@ -2,7 +2,7 @@
 // Extension entry point
 //
 
-import { createDebug, getEditor } from './utils'
+import { createDebug, getEditor, logError } from './utils'
 import { XmlLanguageServer } from './xml-language-server'
 
 import { formatCommand } from './commands/format-command'
@@ -10,6 +10,10 @@ import { renameCommand } from './commands/rename-command'
 
 const debug = createDebug('main')
 let langServer: XmlLanguageServer | null = null
+
+function errorHandler(error: unknown) {
+  logError('A command failed', error)
+}
 
 export function activate() {
   debug('#activate')
@@ -41,10 +45,7 @@ nova.commands.register(
   getEditor(async (editor) => {
     if (!langServer?.languageClient) return
 
-    await formatCommand(editor, langServer.languageClient).catch((error) => {
-      debug(error.message)
-      debug(error.stack)
-    })
+    await formatCommand(editor, langServer.languageClient).catch(errorHandler)
   })
 )
 
@@ -53,9 +54,6 @@ nova.commands.register(
   getEditor(async (editor) => {
     if (!langServer?.languageClient) return
 
-    await renameCommand(editor, langServer.languageClient).catch((error) => {
-      debug(error.message)
-      debug(error.stack)
-    })
+    await renameCommand(editor, langServer.languageClient).catch(errorHandler)
   })
 )
