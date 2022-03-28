@@ -65,6 +65,18 @@ You can opt into it like this:
 </syntax>
 ```
 
+**Local Catalog**
+
+If your project uses its own `catalog.xml` file for mapping namespaces to schemas, you can point to its folder using a configuration setting, e.g.:
+
+```json
+{
+  "xml.catalogFolder": "src/xml"
+}
+```
+
+This will let XML Extension load mappings from `src/xml/catalog.xml` as well.
+
 ### Writing Schemas
 
 W3 Schools has good tutorials for creating both [DTD](https://www.w3schools.com/xml/xml_dtd_intro.asp)
