@@ -37,15 +37,13 @@ export class XmlLanguageServer {
       const catalogPath = nova.path.join(packageDir, 'Schemas/catalog.xml')
       let catalogList = [catalogPath]
 
-      const projectPath = nova.workspace.path
-      const localCatalogFolder = nova.workspace.config.get(
-        'xml.catalogFolder',
-        'string'
+      let localCatalogs = nova.workspace.config.get(
+        'robb-j.xml.catalogFiles',
+        'array'
       )
-      if (localCatalogFolder !== null && projectPath !== null) {
-        catalogList.push(
-          nova.path.join(projectPath, localCatalogFolder, 'catalog.xml')
-        )
+
+      if (localCatalogs !== null && localCatalogs.length > 0) {
+        catalogList = catalogList.concat(localCatalogs)
       }
 
       const serverOptions = await this.getServerOptions(
