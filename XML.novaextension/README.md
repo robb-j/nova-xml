@@ -67,15 +67,9 @@ You can opt into it like this:
 
 **Local Catalog**
 
-If your project uses its own `catalog.xml` file for mapping namespaces to schemas, you can point to its folder using a configuration setting, e.g.:
+If your project uses its own catalog file(s) for mapping namespaces to schemas, you can point to them in the project's configuration settings for **XML**.
 
-```json
-{
-  "xml.catalogFolder": "src/xml"
-}
-```
-
-This will let XML Extension load mappings from `src/xml/catalog.xml` as well.
+This will allow XML Extension to load mappings from your local files as well.
 
 ### Writing Schemas
 
