@@ -27,6 +27,15 @@
     }
   ],
 
+  "configWorkspace": [
+    {
+      "title": "XML Catalog file(s)",
+      "description": "A catalog file allows you to associate a namespace with a Schema file for validation.",
+      "key": "robb-j.xml.catalogFiles",
+      "type": "pathArray"
+    }
+  ],
+
   "commands": {
     "editor": [
       {

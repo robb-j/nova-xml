@@ -35,6 +35,16 @@ export class XmlLanguageServer {
         : nova.extension.globalStoragePath
 
       const catalogPath = nova.path.join(packageDir, 'Schemas/catalog.xml')
+      let catalogList = [catalogPath]
+
+      let localCatalogs = nova.workspace.config.get(
+        'robb-j.xml.catalogFiles',
+        'array'
+      )
+
+      if (localCatalogs !== null && localCatalogs.length > 0) {
+        catalogList = catalogList.concat(localCatalogs)
+      }
 
       const serverOptions = await this.getServerOptions(
         packageDir,
@@ -45,7 +55,7 @@ export class XmlLanguageServer {
         initializationOptions: {
           settings: {
             xml: {
-              catalogs: [catalogPath],
+              catalogs: catalogList,
             },
           },
         },
