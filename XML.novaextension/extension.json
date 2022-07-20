@@ -27,6 +27,15 @@
     }
   ],
 
+  "configWorkspace": [
+    {
+      "title": "XML Catalogs",
+      "description": "A catalog file allows you to associate a namespace with a Schema file for validation.",
+      "key": "xml.catalogs",
+      "type": "pathArray"
+    }
+  ],
+
   "commands": {
     "editor": [
       {
