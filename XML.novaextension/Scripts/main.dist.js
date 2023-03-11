@@ -51,7 +51,9 @@ function createDebug(namespace) {
   return (...args) => {
     if (!nova.inDevMode())
       return;
-    const humanArgs = args.map((arg) => typeof arg === "object" ? JSON.stringify(arg) : arg);
+    const humanArgs = args.map(
+      (arg) => typeof arg === "object" ? JSON.stringify(arg) : arg
+    );
     console.info(`${namespace}:`, ...humanArgs);
   };
 }
@@ -130,7 +132,10 @@ var XmlLanguageServer = class {
         debug("#start");
         const packageDir = nova.inDevMode() ? nova.extension.path : nova.extension.globalStoragePath;
         const catalogPath = nova.path.join(packageDir, "Schemas/catalog.xml");
-        const serverOptions = yield this.getServerOptions(packageDir, DEBUG_LOGS ? nova.workspace.path : null);
+        const serverOptions = yield this.getServerOptions(
+          packageDir,
+          DEBUG_LOGS ? nova.workspace.path : null
+        );
         const clientOptions = {
           syntaxes: ["xml"],
           initializationOptions: {
@@ -144,7 +149,12 @@ var XmlLanguageServer = class {
         yield this.prepareBinary(serverOptions.path);
         debug("serverOptions", serverOptions);
         debug("clientOptions", clientOptions);
-        const client = new LanguageClient("robb-j.xml", "XML LanguageClient", serverOptions, clientOptions);
+        const client = new LanguageClient(
+          "robb-j.xml",
+          "XML LanguageClient",
+          serverOptions,
+          clientOptions
+        );
         client.start();
         nova.subscriptions.add(client);
         this.languageClient = client;
@@ -166,6 +176,7 @@ var XmlLanguageServer = class {
       }
     });
   }
+  // Make sure the LSP server binary is executable
   prepareBinary(path) {
     return new Promise((resolve, reject) => {
       const process = new Process("/usr/bin/env", {
@@ -215,12 +226,18 @@ function formatCommand(editor, client) {
       }
     };
     debug2("format", params);
-    const result = yield client.sendRequest("textDocument/formatting", params);
+    const result = yield client.sendRequest(
+      "textDocument/formatting",
+      params
+    );
     if (!result)
       return;
     editor.edit((edit) => {
       for (const change of result.reverse()) {
-        edit.replace(getEditorRange(editor.document, change.range), change.newText);
+        edit.replace(
+          getEditorRange(editor.document, change.range),
+          change.newText
+        );
       }
     });
   });
@@ -238,7 +255,11 @@ function renameCommand(editor, client) {
     if (!selectedPosition)
       return debug3("Nothing selected");
     const newName = yield new Promise((resolve) => {
-      nova.workspace.showInputPalette("New name for symbol", { placeholder: editor.selectedText, value: editor.selectedText }, resolve);
+      nova.workspace.showInputPalette(
+        "New name for symbol",
+        { placeholder: editor.selectedText, value: editor.selectedText },
+        resolve
+      );
     });
     if (!newName || newName == editor.selectedText) {
       return;
@@ -249,7 +270,10 @@ function renameCommand(editor, client) {
       position: selectedPosition,
       newName
     };
-    const result = yield client.sendRequest("textDocument/rename", params);
+    const result = yield client.sendRequest(
+      "textDocument/rename",
+      params
+    );
     debug3("result", result);
     if (!result)
       return;
@@ -266,7 +290,10 @@ function renameCommand(editor, client) {
       }
       editor2.edit((edit) => {
         for (const change of changes.reverse()) {
-          edit.replace(getEditorRange(editor2.document, change.range), change.newText);
+          edit.replace(
+            getEditorRange(editor2.document, change.range),
+            change.newText
+          );
         }
       });
     }
@@ -300,13 +327,19 @@ function deactivate() {
     langServer = null;
   }
 }
-nova.commands.register("robb-j.xml.format", getEditor((editor) => __async(void 0, null, function* () {
-  if (!(langServer == null ? void 0 : langServer.languageClient))
-    return;
-  yield formatCommand(editor, langServer.languageClient).catch(errorHandler);
-})));
-nova.commands.register("robb-j.xml.rename", getEditor((editor) => __async(void 0, null, function* () {
-  if (!(langServer == null ? void 0 : langServer.languageClient))
-    return;
-  yield renameCommand(editor, langServer.languageClient).catch(errorHandler);
-})));
+nova.commands.register(
+  "robb-j.xml.format",
+  getEditor((editor) => __async(void 0, null, function* () {
+    if (!(langServer == null ? void 0 : langServer.languageClient))
+      return;
+    yield formatCommand(editor, langServer.languageClient).catch(errorHandler);
+  }))
+);
+nova.commands.register(
+  "robb-j.xml.rename",
+  getEditor((editor) => __async(void 0, null, function* () {
+    if (!(langServer == null ? void 0 : langServer.languageClient))
+      return;
+    yield renameCommand(editor, langServer.languageClient).catch(errorHandler);
+  }))
+);
