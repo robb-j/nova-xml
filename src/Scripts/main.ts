@@ -2,23 +2,20 @@
 // Extension entry point
 //
 
-import { createDebug, getEditor, logError } from './utils'
+import { createDebug } from './utils'
 import { XmlLanguageServer } from './xml-language-server'
 
 import { formatCommand } from './commands/format-command'
 import { renameCommand } from './commands/rename-command'
+import { restartCommand } from './commands/restart-command'
 
 const debug = createDebug('main')
-let langServer: XmlLanguageServer | null = null
-
-function errorHandler(error: unknown) {
-  logError('A command failed', error)
-}
 
 export function activate() {
   debug('#activate')
 
-  langServer = new XmlLanguageServer()
+  const langServer = new XmlLanguageServer()
+  nova.subscriptions.add(langServer)
 
   nova.workspace.onDidAddTextEditor((editor) => {
     editor.onWillSave(async () => {
@@ -29,31 +26,15 @@ export function activate() {
       }
     })
   })
+  nova.commands.register('robb-j.xml.format', (editor) =>
+    formatCommand(editor, langServer)
+  )
+  nova.commands.register('robb-j.xml.rename', (editor) =>
+    renameCommand(editor, langServer)
+  )
+  nova.commands.register('robb-j.xml.restart', () => restartCommand(langServer))
 }
 
 export function deactivate() {
   debug('#deactivate')
-
-  if (langServer) {
-    langServer.deactivate()
-    langServer = null
-  }
 }
-
-nova.commands.register(
-  'robb-j.xml.format',
-  getEditor(async (editor) => {
-    if (!langServer?.languageClient) return
-
-    await formatCommand(editor, langServer.languageClient).catch(errorHandler)
-  })
-)
-
-nova.commands.register(
-  'robb-j.xml.rename',
-  getEditor(async (editor) => {
-    if (!langServer?.languageClient) return
-
-    await renameCommand(editor, langServer.languageClient).catch(errorHandler)
-  })
-)

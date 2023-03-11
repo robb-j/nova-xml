@@ -1,3 +1,7 @@
+## (next)
+
+- Added `Restart Server` command
+
 ## Version 0.3.0
 
 - Tree sitter support! Added support for `<tree-sitter>` syntax in `https://www.nova.app/syntax` xml files.

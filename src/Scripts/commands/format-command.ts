@@ -4,13 +4,19 @@ import type {
 } from 'vscode-languageserver-protocol'
 
 import { createDebug, getEditorRange } from '../utils'
+import { XmlLanguageServer } from '../xml-language-server'
 
 const debug = createDebug('format')
 
 export async function formatCommand(
   editor: TextEditor,
-  client: LanguageClient
+  { languageClient }: XmlLanguageServer
 ) {
+  if (!languageClient) {
+    debug('LanguageServer not running')
+    return
+  }
+
   const params: DocumentFormattingParams = {
     textDocument: {
       uri: editor.document.uri,
@@ -23,7 +29,7 @@ export async function formatCommand(
 
   debug('format', params)
 
-  const result = (await client.sendRequest(
+  const result = (await languageClient.sendRequest(
     'textDocument/formatting',
     params
   )) as TextEdit[] | null

@@ -38,6 +38,12 @@
   ],
 
   "commands": {
+    "extensions": [
+      {
+        "title": "Restart Server",
+        "command": "robb-j.xml.restart"
+      }
+    ],
     "editor": [
       {
         "title": "Format",

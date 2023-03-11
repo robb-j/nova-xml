@@ -16,18 +16,13 @@ export class XmlLanguageServer {
     this.start()
   }
 
-  deactivate() {
-    debug('#deactivate')
-
-    this.stop()
-  }
-
   async start() {
-    this.stop()
+    if (this.languageClient) {
+      this.languageClient.stop()
+      this.languageClient = null
+    }
 
     try {
-      this.stop()
-
       debug('#start')
 
       const packageDir = nova.inDevMode()
@@ -65,7 +60,6 @@ export class XmlLanguageServer {
 
       client.start()
 
-      nova.subscriptions.add(client as any)
       this.languageClient = client
 
       this.setupLanguageServer(client)
@@ -74,14 +68,16 @@ export class XmlLanguageServer {
     }
   }
 
+  dispose() {
+    debug('#dispose')
+    this.stop()
+  }
+
   async stop() {
+    debug('#stop')
     if (this.languageClient) {
-      debug('#stop')
       this.languageClient.stop()
-      nova.subscriptions.remove(this.languageClient as any)
       this.languageClient = null
-    } else {
-      debug('#stop (not running)')
     }
   }
 

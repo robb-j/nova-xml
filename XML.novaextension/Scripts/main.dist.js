@@ -46,7 +46,6 @@ __export(main_exports, {
 module.exports = __toCommonJS(main_exports);
 
 // src/Scripts/utils.ts
-var console = globalThis.console;
 function createDebug(namespace) {
   return (...args) => {
     if (!nova.inDevMode())
@@ -55,11 +54,6 @@ function createDebug(namespace) {
       (arg) => typeof arg === "object" ? JSON.stringify(arg) : arg
     );
     console.info(`${namespace}:`, ...humanArgs);
-  };
-}
-function getEditor(block) {
-  return (editorOrWorkspace, maybeEditor) => {
-    return block(maybeEditor != null ? maybeEditor : editorOrWorkspace);
   };
 }
 function getEditorRange(document, range) {
@@ -120,15 +114,13 @@ var XmlLanguageServer = class {
     debug("#new");
     this.start();
   }
-  deactivate() {
-    debug("#deactivate");
-    this.stop();
-  }
   start() {
     return __async(this, null, function* () {
-      this.stop();
+      if (this.languageClient) {
+        this.languageClient.stop();
+        this.languageClient = null;
+      }
       try {
-        this.stop();
         debug("#start");
         const packageDir = nova.inDevMode() ? nova.extension.path : nova.extension.globalStoragePath;
         const catalogPath = nova.path.join(packageDir, "Schemas/catalog.xml");
@@ -156,7 +148,6 @@ var XmlLanguageServer = class {
           clientOptions
         );
         client.start();
-        nova.subscriptions.add(client);
         this.languageClient = client;
         this.setupLanguageServer(client);
       } catch (error) {
@@ -164,15 +155,16 @@ var XmlLanguageServer = class {
       }
     });
   }
+  dispose() {
+    debug("#dispose");
+    this.stop();
+  }
   stop() {
     return __async(this, null, function* () {
+      debug("#stop");
       if (this.languageClient) {
-        debug("#stop");
         this.languageClient.stop();
-        nova.subscriptions.remove(this.languageClient);
         this.languageClient = null;
-      } else {
-        debug("#stop (not running)");
       }
     });
   }
@@ -214,8 +206,12 @@ var XmlLanguageServer = class {
 
 // src/Scripts/commands/format-command.ts
 var debug2 = createDebug("format");
-function formatCommand(editor, client) {
-  return __async(this, null, function* () {
+function formatCommand(_0, _1) {
+  return __async(this, arguments, function* (editor, { languageClient }) {
+    if (!languageClient) {
+      debug2("LanguageServer not running");
+      return;
+    }
     const params = {
       textDocument: {
         uri: editor.document.uri
@@ -226,7 +222,7 @@ function formatCommand(editor, client) {
       }
     };
     debug2("format", params);
-    const result = yield client.sendRequest(
+    const result = yield languageClient.sendRequest(
       "textDocument/formatting",
       params
     );
@@ -245,13 +241,16 @@ function formatCommand(editor, client) {
 
 // src/Scripts/commands/rename-command.ts
 var debug3 = createDebug("format");
-function renameCommand(editor, client) {
-  return __async(this, null, function* () {
+function renameCommand(_0, _1) {
+  return __async(this, arguments, function* (editor, { languageClient }) {
     var _a;
     debug3("format", editor.document.uri);
+    if (!languageClient) {
+      debug3("LanguageServer not running");
+      return;
+    }
     editor.selectWordsContainingCursors();
-    const range = editor.selectedRange;
-    const selectedPosition = (_a = getLspRange(editor.document, range)) == null ? void 0 : _a.start;
+    const selectedPosition = (_a = getLspRange(editor.document, editor.selectedRange)) == null ? void 0 : _a.start;
     if (!selectedPosition)
       return debug3("Nothing selected");
     const newName = yield new Promise((resolve) => {
@@ -270,7 +269,7 @@ function renameCommand(editor, client) {
       position: selectedPosition,
       newName
     };
-    const result = yield client.sendRequest(
+    const result = yield languageClient.sendRequest(
       "textDocument/rename",
       params
     );
@@ -300,15 +299,22 @@ function renameCommand(editor, client) {
   });
 }
 
-// src/Scripts/main.ts
-var debug4 = createDebug("main");
-var langServer = null;
-function errorHandler(error) {
-  logError("A command failed", error);
+// src/Scripts/commands/restart-command.ts
+var debug4 = createDebug("restart");
+function restartCommand(langServer) {
+  return __async(this, null, function* () {
+    debug4("Restarting");
+    langServer.stop();
+    langServer.start();
+  });
 }
+
+// src/Scripts/main.ts
+var debug5 = createDebug("main");
 function activate() {
-  debug4("#activate");
-  langServer = new XmlLanguageServer();
+  debug5("#activate");
+  const langServer = new XmlLanguageServer();
+  nova.subscriptions.add(langServer);
   nova.workspace.onDidAddTextEditor((editor) => {
     editor.onWillSave(() => __async(this, null, function* () {
       var _a;
@@ -319,27 +325,16 @@ function activate() {
       }
     }));
   });
+  nova.commands.register(
+    "robb-j.xml.format",
+    (editor) => formatCommand(editor, langServer)
+  );
+  nova.commands.register(
+    "robb-j.xml.rename",
+    (editor) => renameCommand(editor, langServer)
+  );
+  nova.commands.register("robb-j.xml.restart", () => restartCommand(langServer));
 }
 function deactivate() {
-  debug4("#deactivate");
-  if (langServer) {
-    langServer.deactivate();
-    langServer = null;
-  }
+  debug5("#deactivate");
 }
-nova.commands.register(
-  "robb-j.xml.format",
-  getEditor((editor) => __async(void 0, null, function* () {
-    if (!(langServer == null ? void 0 : langServer.languageClient))
-      return;
-    yield formatCommand(editor, langServer.languageClient).catch(errorHandler);
-  }))
-);
-nova.commands.register(
-  "robb-j.xml.rename",
-  getEditor((editor) => __async(void 0, null, function* () {
-    if (!(langServer == null ? void 0 : langServer.languageClient))
-      return;
-    yield renameCommand(editor, langServer.languageClient).catch(errorHandler);
-  }))
-);

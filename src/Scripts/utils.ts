@@ -4,8 +4,6 @@
 
 import type { Range as LspRange } from 'vscode-languageserver-protocol'
 
-export const console: Console = (globalThis as any).console
-
 /**
  * Generate a method for namespaced debug-only logging,
  * inspired by https://github.com/visionmedia/debug.
@@ -24,24 +22,6 @@ export function createDebug(namespace: string) {
     console.info(`${namespace}:`, ...humanArgs)
   }
 }
-
-//
-//
-//
-
-/** Wrap Nova's weird Workspace/TextEditor command parameters */
-export function getEditor<T>(block: (editor: TextEditor) => T) {
-  return (
-    editorOrWorkspace: TextEditor | Workspace,
-    maybeEditor: TextEditor | null
-  ) => {
-    return block(maybeEditor ?? (editorOrWorkspace as TextEditor))
-  }
-}
-
-//
-//
-//
 
 /**
  * Shamelessly stolen from
