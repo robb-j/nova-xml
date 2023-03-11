@@ -142,4 +142,23 @@
       </strings>
     </scope>
   </scopes>
+  
+  <tree-sitter language="">
+    <highlights />
+    <highlights path="highlights.scm" />
+    
+    <symbols />
+    <symbols path="symbols.scm" />
+    
+    <folds />
+    <folds path="folds.scm" />
+    
+    <injections />
+    <injections path="injections.scm" />
+    
+    <text-checking path="textChecking.scm" />
+    
+    <colors />
+    <colors path="colors.scm" />
+  </tree-sitter>
 </syntax>
