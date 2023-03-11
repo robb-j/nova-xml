@@ -1,3 +1,10 @@
+## Version 0.3.0
+
+- Tree sitter support! Added support for `<tree-sitter>` syntax in `https://www.nova.app/syntax` xml files.
+- Update the language server from `0.21.0` to `0.24.0`, see it's [GitHub releases](https://github.com/redhat-developer/vscode-xml/releases) for info
+- Build tooling updates
+- Specify custom catalog files per-workspace, thanks [@greystate](https://github.com/greystate)!
+
 ## Version 0.2.1
 
 Update the language server from `0.18.0` to `0.21.0`, see it's [GitHub releases](https://github.com/redhat-developer/vscode-xml/releases) for info

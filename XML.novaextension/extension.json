@@ -3,7 +3,7 @@
   "name": "XML",
   "organization": "robb-j",
   "description": "Adds XML linting, schema support and formatting to Nova",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "categories": ["completions", "languages", "issues"],
   "license": "MIT",
   "repository": "https://github.com/robb-j/nova-xml",
@@ -30,9 +30,10 @@
   "configWorkspace": [
     {
       "title": "XML Catalogs",
-      "description": "A catalog file allows you to associate a namespace with a Schema file for validation.",
+      "description": "Catalog files allows you to associate namespaces with a Schema files for validation custom validation.",
       "key": "xml.catalogs",
-      "type": "pathArray"
+      "type": "pathArray",
+      "link": "https://github.com/eclipse/lemminx/blob/main/docs/Configuration.md#catalog"
     }
   ],
 
