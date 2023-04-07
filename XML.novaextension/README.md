@@ -65,6 +65,12 @@ You can opt into it like this:
 </syntax>
 ```
 
+**Local Catalog**
+
+If your project uses its own catalog file(s) for mapping namespaces to schemas, you can point to them in the project's configuration settings for **XML**.
+
+This will allow XML Extension to load mappings from your local files as well.
+
 ### Writing Schemas
 
 W3 Schools has good tutorials for creating both [DTD](https://www.w3schools.com/xml/xml_dtd_intro.asp)
