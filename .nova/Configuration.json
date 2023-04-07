@@ -1,4 +1,5 @@
 {
   "workspace.color": 0,
-  "workspace.name": "xml"
+  "workspace.name": "xml",
+  "xml.catalogs": ["examples/catalog.xml"]
 }

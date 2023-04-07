@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <inventory xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://example.com/inventory" xsi:schemaLocation="https://example.com/inventory ./Inventory.xsd">
+<!-- <inventory xmlns="https://example.com/inventory"> -->
   <garage>
     <car name="Bugatti Veyron" wheels="4" />
     <bicycle name="Gordon" needs-maintenance="true" />

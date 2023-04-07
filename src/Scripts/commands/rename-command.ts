@@ -3,28 +3,31 @@ import type {
   WorkspaceEdit,
 } from 'vscode-languageserver-protocol'
 import { createDebug, getEditorRange, getLspRange } from '../utils'
+import { XmlLanguageServer } from '../xml-language-server'
 
 const debug = createDebug('format')
 
 // Shamelessly stolen from
 // https://github.com/apexskier/nova-typescript/blob/main/src/commands/rename.ts
 
-//
-// TODO:
-// As of nova 7.2 this consistently crashes Nova
-//
-
 export async function renameCommand(
   editor: TextEditor,
-  client: LanguageClient
+  { languageClient }: XmlLanguageServer
 ) {
   debug('format', editor.document.uri)
+
+  if (!languageClient) {
+    debug('LanguageServer not running')
+    return
+  }
 
   // Select the whole of a word
   editor.selectWordsContainingCursors()
 
-  const range = editor.selectedRange
-  const selectedPosition = getLspRange(editor.document, range)?.start
+  const selectedPosition = getLspRange(
+    editor.document,
+    editor.selectedRange
+  )?.start
   if (!selectedPosition) return debug('Nothing selected')
 
   const newName = await new Promise<string | null>((resolve) => {
@@ -46,7 +49,7 @@ export async function renameCommand(
     newName,
   }
 
-  const result = (await client.sendRequest(
+  const result = (await languageClient.sendRequest(
     'textDocument/rename',
     params
   )) as WorkspaceEdit | null

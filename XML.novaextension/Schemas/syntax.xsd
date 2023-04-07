@@ -18,6 +18,7 @@
         <xs:element ref="collections" />
         <xs:element ref="symbols" />
         <!-- <xs:element ref="completions" /> -->
+        <xs:element ref="tree-sitter" />
       </xs:choice>
 
       <xs:attribute name="name" type="xs:string" />
@@ -873,6 +874,150 @@
       </xs:choice>
 
       <xs:attribute name="name" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  
+  
+  <!--
+    Tree Sitter
+  -->
+  <xs:element name="tree-sitter">
+    <xs:annotation>
+      <xs:documentation>
+        By default, this instructs the syntax engine to look for a Tree-sitter parser alongside the XML file, named the same as the syntax’s name attribute. For a syntax named mylang, it will look for libtree-sitter-mylang.dylib exporting a function named tree_sitter_mylang().
+
+        https://docs.nova.app/syntax-reference/tree-sitter/#including-a-parser-in-extensions
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <!-- highlights -->
+        <xs:element name="highlights">
+          <xs:annotation>
+            <xs:documentation>
+              The most common (and definitely most required) query of any language extension is support for syntax highlighting, or coloring of tokens in a document to indicate their meaning.
+              
+              https://docs.nova.app/syntax-reference/tree-sitter/#syntax-highlighting
+            </xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:attribute name="path" type="xs:string" use="optional">
+              <xs:annotation>
+                <xs:documentation>
+                  By default, specifying the highlights element without a path attribute will tell the syntax engine to look for a file named highlights.scm within your extension’s Queries/ folder.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        
+        <!-- symbols -->
+        <xs:element name="symbols">
+          <xs:annotation>
+            <xs:documentation>
+              Symbolication is the process of taking specific nodes from the syntax tree and building a list of user-visible “symbols” that are the major structural components of the file. For procedural languages, this will likely be things like types, functions, etc. For a language like HTML, this is likely important tags.
+              
+              https://docs.nova.app/syntax-reference/tree-sitter/#symbolication
+            </xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:attribute name="path" type="xs:string" use="optional">
+              <xs:annotation>
+                <xs:documentation>
+                  By default, specifying the symbols element without a "path" attribute will tell the syntax engine to look for a file named symbols.scm within your extension’s Queries/ folder.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        
+        <!-- folds -->
+        <xs:element name="folds">
+          <xs:annotation>
+            <xs:documentation>
+              Fold queries define the boundaries on which automatic code folding support is provided in Nova’s editor.
+              
+              https://docs.nova.app/syntax-reference/tree-sitter/#folds
+            </xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:attribute name="path" type="xs:string" use="optional">
+              <xs:annotation>
+                <xs:documentation>
+                  By default, specifying the folds element without a "path" attribute will tell the syntax engine to look for a file named folds.scm within your extension’s Queries/ folder.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        
+        <!-- injections -->
+        <xs:element name="injections">
+          <xs:annotation>
+            <xs:documentation>
+              Injections allow for a language to mark regions of a document which should be parsed as another language by the editor (also known as “code fences”). Examples of this include script and style tags in HTML and triple-backtick blocks in Markdown.
+              
+              https://docs.nova.app/syntax-reference/tree-sitter/#injections
+            </xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:attribute name="path" type="xs:string" use="optional">
+              <xs:annotation>
+                <xs:documentation>
+                  By default, specifying the injections element without a "path" attribute will tell the syntax engine to look for a file named injections.scm within your extension’s Queries/ folder.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        
+        <!-- text-checking -->
+        <xs:element name="text-checking">
+          <xs:annotation>
+            <xs:documentation>
+              Languages that make heavy use of prose may wish to include support for automatic text checking support, which performs operations like spell checking and automatic URL detection. This is often used in languages like HTML and Markdown for human-readable text as well as in many procedural languages for documentation comments.
+              
+              By default, Nova’s editor will scan any region syntax highlighted with the comment selector to be included in text checking. This means that most languages likely don’t have to do anything to support it.
+              
+              https://docs.nova.app/syntax-reference/tree-sitter/#text-checking
+            </xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:attribute name="path" type="xs:string" use="optional">
+              <xs:annotation>
+                <xs:documentation>
+                  By default, specifying the text-checking element without a "path" attribute will tell the syntax engine to look for a file named textChecking.scm within your extension’s Queries/ folder.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        
+        <!-- colors -->
+        <xs:element name="colors">
+          <xs:annotation>
+            <xs:documentation>
+              Extensions that make use of the Colors API can provide a query to automatically detect potential color values in the document to be passed to the extension for further processing.
+              
+              Any nodes matched by color queries will be collected by the editor and provided in the ColorInformationContext object’s candidates property when a color request is made.
+              
+              https://docs.nova.app/syntax-reference/tree-sitter/#colors
+            </xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:attribute name="path" type="xs:string" use="optional">
+              <xs:annotation>
+                <xs:documentation>
+                  By default, specifying the colors element without a "path" attribute will tell the syntax engine to look for a file named colors.scm within your extension’s Queries/ folder.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+      
+      <xs:attribute name="language" type="xs:string" use="optional" />
     </xs:complexType>
   </xs:element>
 
