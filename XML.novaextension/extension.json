@@ -40,7 +40,7 @@
   "commands": {
     "extensions": [
       {
-        "title": "Restart Server",
+        "title": "Restart XML Server",
         "command": "robb-j.xml.restart"
       }
     ],
