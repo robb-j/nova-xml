@@ -44,7 +44,7 @@ XML Extension displays relevant documentation when you hover over symbols:
 
 To configure global preferences, open **Extensions → Extension Library...** then select XML's **Preferences** tab.
 
-<!-- You can also configure preferences on a per-project basis in **Project → Project Settings...** -->
+You can also configure preferences on a per-project basis in **Project → Project Settings...**
 
 ### Associating Schemas
 

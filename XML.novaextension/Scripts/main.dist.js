@@ -116,6 +116,7 @@ var XmlLanguageServer = class {
   }
   start() {
     return __async(this, null, function* () {
+      var _a;
       if (this.languageClient) {
         this.languageClient.stop();
         this.languageClient = null;
@@ -123,7 +124,13 @@ var XmlLanguageServer = class {
       try {
         debug("#start");
         const packageDir = nova.inDevMode() ? nova.extension.path : nova.extension.globalStoragePath;
-        const catalogPath = nova.path.join(packageDir, "Schemas/catalog.xml");
+        const catalogs = (_a = nova.workspace.config.get("xml.catalogs", "array")) != null ? _a : [];
+        catalogs.push(nova.path.join(packageDir, "Schemas/catalog.xml"));
+        for (let i = 0; i < catalogs.length; i++) {
+          if (catalogs[i].startsWith("/"))
+            continue;
+          catalogs[i] = nova.path.join(nova.workspace.path, catalogs[i]);
+        }
         const serverOptions = yield this.getServerOptions(
           packageDir,
           DEBUG_LOGS ? nova.workspace.path : null
@@ -132,9 +139,7 @@ var XmlLanguageServer = class {
           syntaxes: ["xml"],
           initializationOptions: {
             settings: {
-              xml: {
-                catalogs: [catalogPath]
-              }
+              xml: { catalogs }
             }
           }
         };
@@ -250,7 +255,10 @@ function renameCommand(_0, _1) {
       return;
     }
     editor.selectWordsContainingCursors();
-    const selectedPosition = (_a = getLspRange(editor.document, editor.selectedRange)) == null ? void 0 : _a.start;
+    const selectedPosition = (_a = getLspRange(
+      editor.document,
+      editor.selectedRange
+    )) == null ? void 0 : _a.start;
     if (!selectedPosition)
       return debug3("Nothing selected");
     const newName = yield new Promise((resolve) => {
