@@ -71,6 +71,8 @@ If your project uses its own catalog file(s) for mapping namespaces to schemas, 
 
 This will allow XML Extension to load mappings from your local files as well.
 
+> You may need to run the **Restart XML Server** command for these changes to take effect
+
 ### Writing Schemas
 
 W3 Schools has good tutorials for creating both [DTD](https://www.w3schools.com/xml/xml_dtd_intro.asp)
