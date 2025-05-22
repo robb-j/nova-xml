@@ -48,8 +48,7 @@ module.exports = __toCommonJS(main_exports);
 // src/Scripts/utils.ts
 function createDebug(namespace) {
   return (...args) => {
-    if (!nova.inDevMode())
-      return;
+    if (!nova.inDevMode()) return;
     const humanArgs = args.map(
       (arg) => typeof arg === "object" ? JSON.stringify(arg) : arg
     );
@@ -107,7 +106,6 @@ function logError(message, error) {
 
 // src/Scripts/xml-language-server.ts
 var debug = createDebug("xml-language-server");
-var DEBUG_LOGS = nova.inDevMode() && false;
 var XmlLanguageServer = class {
   constructor() {
     this.languageClient = null;
@@ -127,14 +125,13 @@ var XmlLanguageServer = class {
         const catalogs = (_a = nova.workspace.config.get("xml.catalogs", "array")) != null ? _a : [];
         catalogs.push(nova.path.join(packageDir, "Schemas/catalog.xml"));
         for (let i = 0; i < catalogs.length; i++) {
-          if (catalogs[i].startsWith("/"))
-            continue;
+          if (catalogs[i].startsWith("/")) continue;
           catalogs[i] = nova.path.join(nova.workspace.path, catalogs[i]);
         }
-        const serverOptions = yield this.getServerOptions(
-          packageDir,
-          DEBUG_LOGS ? nova.workspace.path : null
-        );
+        const serverOptions = {
+          type: "stdio",
+          path: nova.path.join(packageDir, "bin/lemminx-osx-x86_64")
+        };
         const clientOptions = {
           syntaxes: ["xml"],
           initializationOptions: {
@@ -142,6 +139,7 @@ var XmlLanguageServer = class {
               xml: { catalogs }
             }
           }
+          // debug: true,
         };
         yield this.prepareBinary(serverOptions.path);
         debug("serverOptions", serverOptions);
@@ -188,25 +186,6 @@ var XmlLanguageServer = class {
       debug("Language Server Stopped", err == null ? void 0 : err.message);
     });
   }
-  getServerOptions(packageDir, debugPath) {
-    return __async(this, null, function* () {
-      const serverPath = nova.path.join(packageDir, "bin/lemminx-osx-x86_64");
-      if (debugPath) {
-        const stdinLog = nova.path.join(debugPath, "stdin.log");
-        const stdoutLog = nova.path.join(debugPath, "stdout.log");
-        return {
-          type: "stdio",
-          path: "/bin/sh",
-          args: ["-c", `tee "${stdinLog}" | ${serverPath} | tee "${stdoutLog}"`]
-        };
-      }
-      return {
-        type: "stdio",
-        path: serverPath,
-        args: []
-      };
-    });
-  }
 };
 
 // src/Scripts/commands/format-command.ts
@@ -231,8 +210,7 @@ function formatCommand(_0, _1) {
       "textDocument/formatting",
       params
     );
-    if (!result)
-      return;
+    if (!result) return;
     editor.edit((edit) => {
       for (const change of result.reverse()) {
         edit.replace(
@@ -259,8 +237,7 @@ function renameCommand(_0, _1) {
       editor.document,
       editor.selectedRange
     )) == null ? void 0 : _a.start;
-    if (!selectedPosition)
-      return debug3("Nothing selected");
+    if (!selectedPosition) return debug3("Nothing selected");
     const newName = yield new Promise((resolve) => {
       nova.workspace.showInputPalette(
         "New name for symbol",
@@ -282,8 +259,7 @@ function renameCommand(_0, _1) {
       params
     );
     debug3("result", result);
-    if (!result)
-      return;
+    if (!result) return;
     for (const uri in result.changes) {
       const editor2 = yield nova.workspace.openFile(uri);
       if (!editor2) {
@@ -324,10 +300,9 @@ function activate() {
   const langServer = new XmlLanguageServer();
   nova.subscriptions.add(langServer);
   nova.workspace.onDidAddTextEditor((editor) => {
-    editor.onWillSave(() => __async(this, null, function* () {
+    editor.onWillSave(() => __async(null, null, function* () {
       var _a;
-      if (editor.document.syntax !== "xml")
-        return;
+      if (editor.document.syntax !== "xml") return;
       if ((_a = nova.config.get("robb-j.xml.formatOnSave", "boolean")) != null ? _a : false) {
         yield nova.commands.invoke("robb-j.xml.format", editor);
       }

@@ -27,10 +27,10 @@ export function activate() {
     })
   })
   nova.commands.register('robb-j.xml.format', (editor) =>
-    formatCommand(editor, langServer)
+    formatCommand(editor, langServer),
   )
   nova.commands.register('robb-j.xml.rename', (editor) =>
-    renameCommand(editor, langServer)
+    renameCommand(editor, langServer),
   )
   nova.commands.register('robb-j.xml.restart', () => restartCommand(langServer))
 }

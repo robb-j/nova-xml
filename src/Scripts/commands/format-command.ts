@@ -10,7 +10,7 @@ const debug = createDebug('format')
 
 export async function formatCommand(
   editor: TextEditor,
-  { languageClient }: XmlLanguageServer
+  { languageClient }: XmlLanguageServer,
 ) {
   if (!languageClient) {
     debug('LanguageServer not running')
@@ -31,7 +31,7 @@ export async function formatCommand(
 
   const result = (await languageClient.sendRequest(
     'textDocument/formatting',
-    params
+    params,
   )) as TextEdit[] | null
 
   if (!result) return
@@ -40,7 +40,7 @@ export async function formatCommand(
     for (const change of result.reverse()) {
       edit.replace(
         getEditorRange(editor.document, change.range),
-        change.newText
+        change.newText,
       )
     }
   })

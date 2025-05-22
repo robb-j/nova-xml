@@ -1,7 +1,11 @@
 {
+  "index.ignored_file_patterns" : [
+    "XML.novaextension\/Scripts"
+  ],
+  "robb-j.debugLogPath" : "\/Users\/rob\/Developer\/nova\/xml",
   "workspace.color" : 0,
   "workspace.name" : "xml",
   "xml.catalogs" : [
-    "examples/catalog.xml"
+    "examples\/catalog.xml"
   ]
 }

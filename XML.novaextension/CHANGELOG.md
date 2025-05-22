@@ -1,6 +1,7 @@
-## (next)
+## Version 0.4.0
 
 - Added `Restart Server` command
+- Upgraded the language server from `0.24.0` to `0.29.0`, see it's [GitHub releases](https://github.com/redhat-developer/vscode-xml/releases) for info
 
 ## Version 0.3.0
 

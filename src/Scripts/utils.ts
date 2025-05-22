@@ -17,7 +17,7 @@ export function createDebug(namespace: string) {
     if (!nova.inDevMode()) return
 
     const humanArgs = args.map((arg) =>
-      typeof arg === 'object' ? JSON.stringify(arg) : arg
+      typeof arg === 'object' ? JSON.stringify(arg) : arg,
     )
     console.info(`${namespace}:`, ...humanArgs)
   }
@@ -49,7 +49,7 @@ export function getEditorRange(document: TextDocument, range: LspRange): Range {
 
 export function getLspRange(
   document: TextDocument,
-  range: Range
+  range: Range,
 ): LspRange | null {
   const fullContents = document.getTextInRange(new Range(0, document.length))
   let chars = 0

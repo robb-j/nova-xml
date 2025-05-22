@@ -12,7 +12,7 @@ const debug = createDebug('format')
 
 export async function renameCommand(
   editor: TextEditor,
-  { languageClient }: XmlLanguageServer
+  { languageClient }: XmlLanguageServer,
 ) {
   debug('format', editor.document.uri)
 
@@ -26,7 +26,7 @@ export async function renameCommand(
 
   const selectedPosition = getLspRange(
     editor.document,
-    editor.selectedRange
+    editor.selectedRange,
   )?.start
   if (!selectedPosition) return debug('Nothing selected')
 
@@ -34,7 +34,7 @@ export async function renameCommand(
     nova.workspace.showInputPalette(
       'New name for symbol',
       { placeholder: editor.selectedText, value: editor.selectedText },
-      resolve
+      resolve,
     )
   })
   if (!newName || newName == editor.selectedText) {
@@ -51,7 +51,7 @@ export async function renameCommand(
 
   const result = (await languageClient.sendRequest(
     'textDocument/rename',
-    params
+    params,
   )) as WorkspaceEdit | null
 
   debug('result', result)
@@ -73,7 +73,7 @@ export async function renameCommand(
       for (const change of changes.reverse()) {
         edit.replace(
           getEditorRange(editor.document, change.range),
-          change.newText
+          change.newText,
         )
       }
     })

@@ -2,9 +2,8 @@
 
 set -e
 
-OS=osx-x86_64
-VERSION=0.24.0
-URL=https://github.com/redhat-developer/vscode-xml/releases/download/$VERSION/lemminx-$OS.zip
+# URL=https://github.com/redhat-developer/vscode-xml/releases/download/0.29.0/lemminx-osx-aarch_64.zip
+URL=https://github.com/redhat-developer/vscode-xml/releases/download/0.29.0/lemminx-osx-x86_64.zip
 
 DIR=`dirname $0`/../XML.novaextension/bin
 

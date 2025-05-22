@@ -1,11 +1,8 @@
 import { createDebug, logError } from './utils'
 
 type ServerOptions = ConstructorParameters<typeof LanguageClient>[2]
-type ClientOptions = ConstructorParameters<typeof LanguageClient>[3]
 
 const debug = createDebug('xml-language-server')
-
-const DEBUG_LOGS = nova.inDevMode() && false
 
 export class XmlLanguageServer {
   languageClient: LanguageClient | null = null
@@ -37,17 +34,19 @@ export class XmlLanguageServer {
         catalogs[i] = nova.path.join(nova.workspace.path!, catalogs[i])
       }
 
-      const serverOptions = await this.getServerOptions(
-        packageDir,
-        DEBUG_LOGS ? nova.workspace.path : null
-      )
-      const clientOptions: ClientOptions = {
+      const serverOptions = {
+        type: 'stdio' as const,
+        path: nova.path.join(packageDir, 'bin/lemminx-osx-x86_64'),
+      }
+
+      const clientOptions = {
         syntaxes: ['xml'],
         initializationOptions: {
           settings: {
             xml: { catalogs },
           },
         },
+        // debug: true,
       }
 
       await this.prepareBinary(serverOptions.path)
@@ -59,7 +58,7 @@ export class XmlLanguageServer {
         'robb-j.xml',
         'XML LanguageClient',
         serverOptions,
-        clientOptions
+        clientOptions,
       )
 
       client.start()
@@ -101,26 +100,5 @@ export class XmlLanguageServer {
     client.onDidStop((err) => {
       debug('Language Server Stopped', err?.message)
     })
-  }
-
-  async getServerOptions(packageDir: string, debugPath: string | null) {
-    const serverPath = nova.path.join(packageDir, 'bin/lemminx-osx-x86_64')
-
-    if (debugPath) {
-      const stdinLog = nova.path.join(debugPath, 'stdin.log')
-      const stdoutLog = nova.path.join(debugPath, 'stdout.log')
-
-      return {
-        type: 'stdio',
-        path: '/bin/sh',
-        args: ['-c', `tee "${stdinLog}" | ${serverPath} | tee "${stdoutLog}"`],
-      } as ServerOptions
-    }
-
-    return {
-      type: 'stdio',
-      path: serverPath,
-      args: [],
-    } as ServerOptions
   }
 }
