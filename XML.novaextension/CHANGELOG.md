@@ -1,3 +1,8 @@
+## Version 0.4.1
+
+- Restart the server if `xml.catalogs` is changed, the Language Server seems to need this
+- Reduce icon size for a smaller package
+
 ## Version 0.4.0
 
 - Added `Restart Server` command

@@ -33,6 +33,10 @@ export function activate() {
     renameCommand(editor, langServer),
   )
   nova.commands.register('robb-j.xml.restart', () => restartCommand(langServer))
+
+  nova.workspace.config.observe('xml.catalogs', () => {
+    restartCommand(langServer)
+  })
 }
 
 export function deactivate() {

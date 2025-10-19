@@ -317,6 +317,10 @@ function activate() {
     (editor) => renameCommand(editor, langServer)
   );
   nova.commands.register("robb-j.xml.restart", () => restartCommand(langServer));
+  nova.workspace.config.observe(
+    "xml.catalogs",
+    () => restartCommand(langServer)
+  );
 }
 function deactivate() {
   debug5("#deactivate");
