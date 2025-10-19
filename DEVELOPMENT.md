@@ -13,7 +13,7 @@ npm install
 
 # opt-in to commit hooks
 npx husky
- ```
+```
 
 ## Regular use
 
