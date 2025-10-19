@@ -10,7 +10,10 @@ and [Nova](https://nova.app) installed on your development machine. Then run:
 
 # install NPM dependencies
 npm install
-```
+
+# opt-in to commit hooks
+npx husky
+ ```
 
 ## Regular use
 

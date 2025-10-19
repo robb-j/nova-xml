@@ -3,13 +3,15 @@
   "display": "Nova",
 
   "compilerOptions": {
-    "target": "es6",
+    "target": "esnext",
     "module": "ES2020",
     "moduleResolution": "node",
     "newLine": "lf",
     "strict": true,
     "noEmitOnError": true,
     "skipLibCheck": true,
+
+    "lib": [],
 
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
