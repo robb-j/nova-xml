@@ -13,4 +13,4 @@ npx esbuild \
   --target=es6 \
   --platform=neutral \
   --outfile=XML.novaextension/Scripts/main.dist.js \
-  src/Scripts/main.ts
+  source/main.ts

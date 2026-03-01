@@ -36,7 +36,7 @@ export class XmlLanguageServer {
 
       const serverOptions = {
         type: 'stdio' as const,
-        path: nova.path.join(packageDir, 'bin/lemminx-osx-x86_64'),
+        path: nova.path.join(packageDir, 'bin/lemminx-universal'),
       }
 
       const clientOptions = {

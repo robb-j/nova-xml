@@ -3,19 +3,21 @@
   "display": "Nova",
 
   "compilerOptions": {
-    "target": "esnext",
-    "module": "ES2020",
-    "moduleResolution": "node",
+    "target": "ESNext",
+    "module": "NodeNext",
     "newLine": "lf",
     "strict": true,
     "noEmitOnError": true,
     "skipLibCheck": true,
+    "outDir": "XML.novaextension/Scripts",
 
     "lib": [],
 
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "erasableSyntaxOnly": true,
+    "pretty": true
   },
-  "include": ["src"]
+  "include": ["source"]
 }

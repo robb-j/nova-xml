@@ -1,3 +1,7 @@
+## Version 0.4.2
+
+- The extension now uses a [universal binary](https://developer.apple.com/documentation/apple-silicon/building-a-universal-macos-binary) for the language server, so you shouldn't need rosetta installed. Thanks to GwynethLlewelyn via [#11](https://github.com/robb-j/nova-xml/issues/11)
+
 ## Version 0.4.1
 
 - Restart the server if `xml.catalogs` is changed, the Language Server seems to need this

@@ -39,7 +39,7 @@ var __async = (__this, __arguments, generator) => {
   });
 };
 
-// src/Scripts/main.ts
+// source/main.ts
 var main_exports = {};
 __export(main_exports, {
   activate: () => activate,
@@ -47,7 +47,7 @@ __export(main_exports, {
 });
 module.exports = __toCommonJS(main_exports);
 
-// src/Scripts/utils.ts
+// source/utils.ts
 function createDebug(namespace) {
   return (...args) => {
     if (!nova.inDevMode()) return;
@@ -106,7 +106,7 @@ function logError(message, error) {
   }
 }
 
-// src/Scripts/xml-language-server.ts
+// source/xml-language-server.ts
 var debug = createDebug("xml-language-server");
 var XmlLanguageServer = class {
   constructor() {
@@ -132,7 +132,7 @@ var XmlLanguageServer = class {
         }
         const serverOptions = {
           type: "stdio",
-          path: nova.path.join(packageDir, "bin/lemminx-osx-x86_64")
+          path: nova.path.join(packageDir, "bin/lemminx-universal")
         };
         const clientOptions = {
           syntaxes: ["xml"],
@@ -190,7 +190,7 @@ var XmlLanguageServer = class {
   }
 };
 
-// src/Scripts/commands/format-command.ts
+// source/commands/format-command.ts
 var debug2 = createDebug("format");
 function formatCommand(_0, _1) {
   return __async(this, arguments, function* (editor, { languageClient }) {
@@ -224,7 +224,7 @@ function formatCommand(_0, _1) {
   });
 }
 
-// src/Scripts/commands/rename-command.ts
+// source/commands/rename-command.ts
 var debug3 = createDebug("format");
 function renameCommand(_0, _1) {
   return __async(this, arguments, function* (editor, { languageClient }) {
@@ -285,7 +285,7 @@ function renameCommand(_0, _1) {
   });
 }
 
-// src/Scripts/commands/restart-command.ts
+// source/commands/restart-command.ts
 var debug4 = createDebug("restart");
 function restartCommand(langServer) {
   return __async(this, null, function* () {
@@ -295,7 +295,7 @@ function restartCommand(langServer) {
   });
 }
 
-// src/Scripts/main.ts
+// source/main.ts
 var debug5 = createDebug("main");
 function activate() {
   debug5("#activate");
